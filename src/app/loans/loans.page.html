@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      My Loans
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+
+  <ion-list>
+    <ion-item *ngFor="let loan of loans" [routerLink]="['/detail']">
+      <ion-label>
+        <p>Username: {{loan.username}}</p>
+        <h3>Status: {{loan.status}}</h3>
+        <h3>Due Date: {{loan.duedate | date:'d MMM yyyy'}}</h3>
+        <h3>Loan Items: {{loan.items.length}}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  
+</ion-content>
