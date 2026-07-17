@@ -11,22 +11,23 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p *ngFor="let item of loan.items">
-        {{ item.id }} x {{ item.quantity }}
-      </p>
+      <ion-list>
+        <ion-item *ngFor="let item of loan.items">
+          <ion-label>{{ item.id }} x {{ item.quantity }}</ion-label>
 
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" color="success" (click)="approve(loan.id)">
-            APPROVE
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" color="danger" (click)="reject(loan.id)">
-            REJECT
-          </ion-button>
-        </ion-col>
-      </ion-row>
+          <ion-badge slot="end"
+            [color]="item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'">
+            {{ item.status || 'pending' }}
+          </ion-badge>
+
+          <ng-container *ngIf="!item.status || item.status === 'pending'">
+            <ion-button slot="end" fill="outline" color="success" size="small"
+              (click)="approveItem(loan, item)">✓</ion-button>
+            <ion-button slot="end" fill="outline" color="danger" size="small"
+              (click)="rejectItem(loan, item)">✗</ion-button>
+          </ng-container>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Loan } from '../shared/loan';
 import { FirebaseLoanService } from '../shared/services/firebase-loan.service';
 import { FirebaseAuthService } from '../shared/services/firebase-auth.service';
@@ -15,7 +16,8 @@ export class LoansPage {
 
   constructor(
     private loanService: FirebaseLoanService,
-    private authService: FirebaseAuthService
+    private authService: FirebaseAuthService,
+    private router: Router
   ) { }
 
   ionViewWillEnter() {
@@ -27,5 +29,13 @@ export class LoansPage {
         this.loans = data;
       });
     }
+  }
+
+  goToDetail(id: string | undefined) {
+    if (!id) {
+      console.error('Loan ID is undefined');
+      return;
+    }
+    this.router.navigate(['/tabs/detail', id]);
   }
 }

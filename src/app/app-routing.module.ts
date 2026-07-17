@@ -18,10 +18,6 @@ const routes: Routes = [
   {
     path: 'add-items',
     loadChildren: () => import('./add-items/add-items.module').then(m => m.AddItemsPageModule)
-  },
-  {
-    path: 'detail/:id',
-    loadChildren: () => import('./detail/detail.module').then(m => m.DetailPageModule)
   }
 ];
 

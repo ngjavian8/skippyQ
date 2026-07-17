@@ -19,11 +19,21 @@ export class ManagePage {
     });
   }
 
-  approve(id: string) {
-    this.loanService.updateLoanStatus(id, 'approved');
+  approveItem(loan: any, item: any) {
+    item.status = 'approved';
+    this.saveItemStatuses(loan);
   }
 
-  reject(id: string) {
-    this.loanService.updateLoanStatus(id, 'rejected');
+  rejectItem(loan: any, item: any) {
+    item.status = 'rejected';
+    this.saveItemStatuses(loan);
+  }
+
+  saveItemStatuses(loan: any) {
+    const itemStatuses = loan.items.map((i: any) => ({
+      id: i.id,
+      status: i.status || 'pending'
+    }));
+    this.loanService.updateItemStatuses(loan.id, itemStatuses);
   }
 }

@@ -17,6 +17,17 @@
     </ng-container>
   </ion-list>
 
+  <!-- Show shared users if any were added -->
+  <ion-list *ngIf="getSharedUsers().length > 0">
+    <ion-item-divider>
+      <ion-label>Shared With</ion-label>
+    </ion-item-divider>
+    <ion-item *ngFor="let email of getSharedUsers()">
+      <ion-icon name="person-circle" slot="start" color="primary"></ion-icon>
+      <ion-label>{{ email }}</ion-label>
+    </ion-item>
+  </ion-list>
+
   <ion-button expand="block" color="primary" (click)="submit()">
     Submit
   </ion-button>

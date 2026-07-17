@@ -12,7 +12,7 @@ import { FirebaseLoanService } from '../shared/services/firebase-loan.service';
 })
 export class NewLoanPage {
   items: Item[] = [];
-  
+
   constructor(
     private itemService: ItemService,
     private loanService: FirebaseLoanService,
@@ -27,6 +27,10 @@ export class NewLoanPage {
     return this.items && this.items.some(item => item.quantity > 0);
   }
 
+  getSharedUsers(): string[] {
+    return this.itemService.getSharedUsers();
+  }
+
   async submit() {
     if (!this.hasSelectedItems()) {
       const toast = await this.toastController.create({
@@ -39,7 +43,9 @@ export class NewLoanPage {
       return;
     }
 
-    this.loanService.addLoan(this.items).then(async (loan) => {
+    const sharedUsers = this.itemService.getSharedUsers();
+
+    this.loanService.addLoan(this.items, sharedUsers).then(async (loan) => {
       const toast = await this.toastController.create({
         message: 'Loan created with ID ' + loan.id,
         duration: 2000,

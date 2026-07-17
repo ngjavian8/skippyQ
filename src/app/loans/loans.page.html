@@ -6,7 +6,12 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let loan of loans" [routerLink]="['/detail', loan.id]">
+    <ion-item
+      *ngFor="let loan of loans"
+      button
+      detail="true"
+      (click)="goToDetail(loan.id)">
+
       <ion-icon
         slot="start"
         [name]="loan.status === 'approved' ? 'checkmark-circle' : loan.status === 'rejected' ? 'close-circle' : 'cloud-circle'"
@@ -17,7 +22,9 @@
         <p>Username {{ loan.username }}</p>
         <p>Due Date {{ loan.duedate | date:'d MMM yyyy' }}</p>
         <p>Loan Items {{ loan.items?.length || 0 }}</p>
+        <ion-badge color="warning" *ngIf="loan.isShared">Shared with you</ion-badge>
       </ion-label>
+
     </ion-item>
   </ion-list>
 </ion-content>

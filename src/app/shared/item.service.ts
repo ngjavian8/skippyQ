@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Item } from './item';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
-  private items = [
+
+  private items: Item[] = [
     new Item('Table', 0),
     new Item('Chair', 0),
     new Item('Projector', 0),
@@ -21,19 +22,26 @@ export class ItemService {
     new Item('Mouse', 0),
   ];
 
+  private itemsSubject = new BehaviorSubject<Item[]>(this.items);
+  private sharedUsers: string[] = [];
+
   constructor() { }
 
-  getAll(): Item[] {
-    return this.items;
-  }
-
   getAllAsync(): Observable<Item[]> {
-    return of(this.items);
+    return this.itemsSubject.asObservable();
   }
 
   resetQuantity() {
-    for (let item of this.items) {
-      item.quantity = 0;
-    }
+    this.items.forEach(item => item.quantity = 0);
+    this.sharedUsers = [];
+    this.itemsSubject.next(this.items);
+  }
+
+  setSharedUsers(users: string[]) {
+    this.sharedUsers = users;
+  }
+
+  getSharedUsers(): string[] {
+    return this.sharedUsers;
   }
 }

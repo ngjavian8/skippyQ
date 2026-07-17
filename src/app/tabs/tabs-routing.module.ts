@@ -20,6 +20,10 @@ const routes: Routes = [
         loadChildren: () => import('../manage/manage.module').then(m => m.ManagePageModule)
       },
       {
+        path: 'detail/:id',
+        loadChildren: () => import('../detail/detail.module').then(m => m.DetailPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/new-loan',
         pathMatch: 'full'

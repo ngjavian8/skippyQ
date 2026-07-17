@@ -7,24 +7,45 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="loan">
-  <ion-list>
-    <ion-item>
-      <ion-label>
-        <p>Id: {{ loan.id }}</p>
-        <p>Status: {{ loan.status }}</p>
-        <p>Due Date: {{ loan.duedate | date:'d MMM yyyy' }}</p>
-      </ion-label>
-    </ion-item>
+<ion-content class="ion-padding">
 
-    <ion-item *ngFor="let item of loan.items">
-      <ion-label>{{ item.id }} x {{ item.quantity }}</ion-label>
-    </ion-item>
-  </ion-list>
-
-  <div class="ion-padding" *ngIf="loan.status === 'pending'">
-    <ion-button expand="block" color="danger" (click)="cancelLoan()">
-      Cancel Loan
-    </ion-button>
+  <!-- Loading state while loan is being fetched -->
+  <div *ngIf="!loan" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading loan details...</p>
   </div>
+
+  <!-- Loan details once loaded -->
+  <ng-container *ngIf="loan">
+    <ion-list>
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <p><strong>Id:</strong> {{ loan.id }}</p>
+          <p><strong>Status:</strong> {{ loan.status }}</p>
+          <p><strong>Due Date:</strong> {{ loan.duedate | date:'d MMM yyyy' }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Items with per-item status badge (Idea 2) -->
+      <ion-item *ngFor="let item of loan.items">
+        <ion-label>{{ item.id }} x {{ item.quantity }}</ion-label>
+        <ion-badge slot="end"
+          [color]="item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'">
+          {{ item.status || 'pending' }}
+        </ion-badge>
+      </ion-item>
+    </ion-list>
+
+    <!-- Cancel button: only if pending AND current user is the owner -->
+    <div class="ion-padding">
+      <ion-button
+        expand="block"
+        color="danger"
+        *ngIf="loan.status === 'pending' && isOwner"
+        (click)="cancelLoan()">
+        Cancel Loan
+      </ion-button>
+    </div>
+  </ng-container>
+
 </ion-content>

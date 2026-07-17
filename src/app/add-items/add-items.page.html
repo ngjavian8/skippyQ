@@ -2,29 +2,66 @@
   <ion-toolbar>
     <ion-title>Add Items</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="save()">Done</ion-button>
+      <ion-button (click)="done()">Done</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-searchbar
-    [value]="searchText"
-    (ionInput)="search($event)"
-    placeholder="Search">
-  </ion-searchbar>
+  <!-- Search bar -->
+  <ion-searchbar [(ngModel)]="searchText" placeholder="Search"></ion-searchbar>
 
+  <!-- Items list -->
   <ion-list>
-    <ion-item *ngFor="let item of items">
+    <ion-item *ngFor="let item of filteredItems()">
       <ion-label>{{ item.id }}</ion-label>
-
       <ion-input
-        class="qty-input"
         type="number"
-        inputmode="numeric"
+        slot="end"
+        [(ngModel)]="item.quantity"
         min="0"
-        [(ngModel)]="item.quantity">
+        style="max-width: 60px; text-align: right;">
       </ion-input>
     </ion-item>
   </ion-list>
+
+  <!-- Share with classmates section -->
+  <ion-item-divider>
+    <ion-label>Share Loan With Classmates</ion-label>
+  </ion-item-divider>
+
+  <!-- Input row -->
+  <ion-item>
+    <ion-label position="floating">Classmate Email</ion-label>
+    <ion-input
+      [(ngModel)]="shareEmail"
+      type="email"
+      placeholder="e.g. ben@nyp.sg"
+      (keyup.enter)="addSharedUser()">
+    </ion-input>
+  </ion-item>
+
+  <!-- Validation error message -->
+  <ion-item *ngIf="shareError" lines="none">
+    <ion-label color="danger" class="ion-text-wrap">
+      <small>{{ shareError }}</small>
+    </ion-label>
+  </ion-item>
+
+  <ion-button expand="block" fill="outline" (click)="addSharedUser()" [disabled]="isValidating">
+    <ion-spinner *ngIf="isValidating" name="crescent" slot="start"></ion-spinner>
+    {{ isValidating ? 'Checking...' : '+ Add Shared User' }}
+  </ion-button>
+
+  <!-- Added shared users list -->
+  <ion-list *ngIf="sharedUsers.length > 0">
+    <ion-item *ngFor="let email of sharedUsers">
+      <ion-icon name="person-circle" slot="start" color="primary"></ion-icon>
+      <ion-label>{{ email }}</ion-label>
+      <ion-button slot="end" fill="clear" color="danger" (click)="removeSharedUser(email)">
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
