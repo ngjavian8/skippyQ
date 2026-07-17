@@ -89,5 +89,12 @@ export class LoanService {
       });
     });
   }
+  deleteLoan(id: string) {
+    return firebase.firestore().collection('loans').doc(id).delete();
+  }
+
+  updateStatus(id: string, status: string) {
+    return firebase.firestore().collection('loans').doc(id).update({ status: status });
+  }
 
 }

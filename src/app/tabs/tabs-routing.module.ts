@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
@@ -21,15 +21,10 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/login',
+        redirectTo: '/tabs/new-loan',
         pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
   }
 ];
 

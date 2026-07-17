@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import { Observable, of } from 'rxjs';
 import { Item } from './item';
 
 @Injectable({
@@ -26,7 +25,7 @@ export class ItemService {
 
   getAll(): Item[] {
     return this.items;
-  } 
+  }
 
   getAllAsync(): Observable<Item[]> {
     return of(this.items);

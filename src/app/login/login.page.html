@@ -4,25 +4,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-text-center">
-  <img src="../../assets/img/background.png" class="background-image">
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input [(ngModel)]="email"></ion-input>
+  </ion-item>
 
-  <form>
+  <ion-item>
+    <ion-label position="stacked">Password</ion-label>
+    <ion-input type="password" [(ngModel)]="password"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label>Email</ion-label>
-      <ion-input type="email" ></ion-input>
-    </ion-item>
+  <ion-button expand="block" class="ion-margin-top" (click)="login()">
+    Login
+  </ion-button>
 
-    <ion-item>
-      <ion-label>Password</ion-label>
-      <ion-input type="password"></ion-input>
-    </ion-item>
-
-    <ion-button type="submit" (click)="login()">
-      Login
-    </ion-button>
-
-  </form>
-
+  <p *ngIf="errorMessage" class="error-text">
+    {{ errorMessage }}
+  </p>
 </ion-content>

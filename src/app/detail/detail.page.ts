@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Loan } from '../shared/loan';
-import { LoanService } from '../shared/loan.service';
+import { FirebaseLoanService } from '../shared/services/firebase-loan.service';
 
 @Component({
   selector: 'app-detail',
@@ -10,8 +10,22 @@ import { LoanService } from '../shared/loan.service';
   standalone: false,
 })
 export class DetailPage {
-  loan: Loan; 
+  loan: Loan;
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private loanService: FirebaseLoanService
+  ) {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.loanService.getLoanById(id!).then(data => {
+      this.loan = data;
+    });
+  }
 
+  cancelLoan() {
+    this.loanService.deleteLoan(this.loan.id).then(() => {
+      this.router.navigate(['/tabs/loans']);
+    });
+  }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Loan } from '../shared/loan';
-import { LoanService } from '../shared/loan.service';
+import { FirebaseLoanService } from '../shared/services/firebase-loan.service';
+import { FirebaseAuthService } from '../shared/services/firebase-auth.service';
 
 @Component({
   selector: 'app-loans',
@@ -9,13 +10,22 @@ import { LoanService } from '../shared/loan.service';
   standalone: false,
 })
 export class LoansPage {
-  loans: Loan[];
+  loans: Loan[] = [];
+  email: string = '';
 
-  constructor(private loanService: LoanService) {
-    this.loanService.getAllLoans()
-      .subscribe(data => {
+  constructor(
+    private loanService: FirebaseLoanService,
+    private authService: FirebaseAuthService
+  ) { }
+
+  ionViewWillEnter() {
+    const user = this.authService.getCurrentUser();
+    this.email = user?.email || '';
+
+    if (this.email) {
+      this.loanService.getLoansForUser(this.email).subscribe(data => {
         this.loans = data;
-      })
+      });
+    }
   }
-
 }

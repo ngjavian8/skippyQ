@@ -2,22 +2,29 @@
   <ion-toolbar>
     <ion-title>Add Items</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="primary" (click)="save()">Done</ion-button>
+      <ion-button (click)="save()">Done</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-searchbar (ionChange)="search($event)"></ion-searchbar>
+  <ion-searchbar
+    [value]="searchText"
+    (ionInput)="search($event)"
+    placeholder="Search">
+  </ion-searchbar>
 
   <ion-list>
     <ion-item *ngFor="let item of items">
-      <ion-label>
-        <h2>{{item.id}}</h2>
-      </ion-label>
-      <ion-input slot="end" type="text" [(ngModel)]="item.quantity"></ion-input>
+      <ion-label>{{ item.id }}</ion-label>
+
+      <ion-input
+        class="qty-input"
+        type="number"
+        inputmode="numeric"
+        min="0"
+        [(ngModel)]="item.quantity">
+      </ion-input>
     </ion-item>
   </ion-list>
-
 </ion-content>

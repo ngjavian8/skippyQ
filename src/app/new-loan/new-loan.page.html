@@ -1,19 +1,23 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      New Loan
-    </ion-title>
+    <ion-title>New Loan</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-button expand="block" routerLink="/add-items">
+    Add Items
+  </ion-button>
 
-  <ion-button fill="clear" expand="block" [routerLink]="['/add-items']">Add Items</ion-button>
+  <ion-list *ngIf="hasSelectedItems()">
+    <ng-container *ngFor="let item of items">
+      <ion-item *ngIf="item.quantity > 0">
+        <ion-label>{{ item.id }} x {{ item.quantity }}</ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
 
-  <ion-label *ngFor="let item of items">
-    <h2 *ngIf="item.quantity > 0">{{item.id}} x {{item.quantity}}</h2>
-  </ion-label>
-
-  <ion-button expand="block" (click)="submit()">Submit</ion-button>
-
+  <ion-button expand="block" color="primary" (click)="submit()">
+    Submit
+  </ion-button>
 </ion-content>

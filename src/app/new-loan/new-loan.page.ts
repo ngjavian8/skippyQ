@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Item } from '../shared/item';
 import { ItemService } from '../shared/item.service';
-import { Loan } from '../shared/loan';
-import { LoanService } from '../shared/loan.service';
+import { FirebaseLoanService } from '../shared/services/firebase-loan.service';
 
 @Component({
   selector: 'app-new-loan',
@@ -12,39 +11,43 @@ import { LoanService } from '../shared/loan.service';
   standalone: false,
 })
 export class NewLoanPage {
-  items: Item[];
-  loan: Loan;
-
+  items: Item[] = [];
+  
   constructor(
     private itemService: ItemService,
-    private loanService: LoanService,
-    private toastController: ToastController) {
-
-    this.itemService.getAllAsync().subscribe(result =>
-      this.items = result
-    );
-
+    private loanService: FirebaseLoanService,
+    private toastController: ToastController
+  ) {
+    this.itemService.getAllAsync().subscribe(data => {
+      this.items = data;
+    });
   }
 
-  submit() {
-    // for (let temp of this.items) {
-    //   console.log(temp.id + ': ' + temp.quantity);
-    // }
+  hasSelectedItems(): boolean {
+    return this.items && this.items.some(item => item.quantity > 0);
+  }
 
-    this.loanService.createLoan(this.items).then(async loan => {
+  async submit() {
+    if (!this.hasSelectedItems()) {
+      const toast = await this.toastController.create({
+        message: 'You cannot create a loan with no items.',
+        duration: 2000,
+        position: 'top',
+        color: 'danger'
+      });
+      await toast.present();
+      return;
+    }
 
+    this.loanService.addLoan(this.items).then(async (loan) => {
       const toast = await this.toastController.create({
         message: 'Loan created with ID ' + loan.id,
         duration: 2000,
         position: 'top',
-        color: 'secondary'
+        color: 'success'
       });
-      toast.present();
-
-      // After loan created successfully, reset all item quantity to 0
+      await toast.present();
       this.itemService.resetQuantity();
     });
-
   }
-
 }
